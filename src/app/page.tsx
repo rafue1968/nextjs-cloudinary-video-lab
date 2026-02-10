@@ -20,7 +20,6 @@ export default function Home() {
   }, []);
 
   const uploadVideo = async () => {
-
     if (!cloudinaryLoaded){
       alert("Cloudinary widget is still loading, please wait...");
       return;
@@ -39,7 +38,9 @@ export default function Home() {
         folder: "video-showcase",
         resourceType: "video",
         sources: ["local"],
-        maxFileSize: 500_000_000, // 200MB
+        maxFileSize: 500_000_000, // 500MB,
+        multiple: false,
+        tags: ["demo"]
       },
       (error: any, result: any) => {
         if (!error && result.event === "success") {
@@ -48,6 +49,7 @@ export default function Home() {
             {
               url: result.info.secure_url,
               public_id: result.info.public_id,
+              tags: result.info.tags,
             },
           ]);
         }
@@ -82,7 +84,7 @@ function VideoCard({ video }: { video: Video }) {
 
   const optimizedVideo = video.url.replace(
     "/upload/",
-    "/upload/f_auto,q_auto/"
+    "/upload/f_auto,q_auto,w_640,h_360,c_fill,l_watermark,o_50,g_south_east/"
   );
 
   return (
