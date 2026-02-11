@@ -6,7 +6,7 @@ export async function POST() {
 
   const paramsToSign = {
     folder: "video-showcase",
-    resource_type: "video",
+    // resource_type: "video",
     source: "uw",
     timestamp,
   };

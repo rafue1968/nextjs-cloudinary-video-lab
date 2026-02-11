@@ -40,7 +40,6 @@ export default function Home() {
         sources: ["local"],
         maxFileSize: 500_000_000, // 500MB,
         multiple: false,
-        tags: ["demo"]
       },
       (error: any, result: any) => {
         if (!error && result.event === "success") {
@@ -84,8 +83,9 @@ function VideoCard({ video }: { video: Video }) {
 
   const optimizedVideo = video.url.replace(
     "/upload/",
-    "/upload/f_auto,q_auto,w_640,h_360,c_fill,l_watermark,o_50,g_south_east/"
+    "/upload/f_auto,q_auto,w_640,h_360,c_fill/"
   );
+
 
   return (
     <div className="video-card">
