@@ -19,6 +19,22 @@ export default function Home() {
     document.body.appendChild(script);
   }, []);
 
+  useEffect(() => {
+    fetch("/api/videos")
+      .then((res) =>{
+        if (!res.ok) throw new Error("Failed to fetch videos");
+        return res.json();
+      })
+      .then((data) => {
+        const formatted = data.map((item: any) => ({
+          url: item.secure_url,
+          public_id: item.public_id,
+        }));
+        setVideos(formatted)
+      })
+      .catch((err) => console.error(err));
+  }, [])
+
   const uploadVideo = async () => {
     if (!cloudinaryLoaded){
       alert("Cloudinary widget is still loading, please wait...");
@@ -43,14 +59,15 @@ export default function Home() {
       },
       (error: any, result: any) => {
         if (!error && result.event === "success") {
-          setVideos((prev) => [
-            ...prev,
-            {
-              url: result.info.secure_url,
-              public_id: result.info.public_id,
-              tags: result.info.tags,
-            },
-          ]);
+          fetch("/api/videos")
+            .then(res => res.json())
+            .then(data => {
+              const formatted = data.map((item: any) => ({
+                url: item.secure_url,
+                public_id: item.public_id,
+              }));
+              setVideos(formatted);
+            });
         }
       }
     );
@@ -78,7 +95,7 @@ export default function Home() {
 function VideoCard({ video }: { video: Video }) {
   const thumbnail = video.url.replace(
     "/upload/",
-    "/upload/so_1,w_400,h_250,c_fill/"
+    "/upload/so_1,pg_1,w_400,h_250,c_fill/"
   );
 
   const optimizedVideo = video.url.replace(
